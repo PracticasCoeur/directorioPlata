@@ -23,7 +23,7 @@ function pintar(){
         amigos.forEach((contacto)=>{
             let amigo=document.createElement("div");
             amigo.innerHTML=`<p>${contacto.nombre}</p><button class="muestraDetalles"><input type="hidden" value="${contacto.telefono}"/>Detalles</button>
-            <button class="eliminar" style="background-color: red;"><input type="hidden" value="${contacto.telefono}"/>Eliminar</button>`;
+            <button class="eliminarContacto" style="background-color: red;" ">Eliminar</button>`;
             lista.appendChild(amigo)
         })
         let botones=document.getElementsByClassName("muestraDetalles"); //mostrar detalles
@@ -31,13 +31,49 @@ function pintar(){
             const element = botones[i];
             element.addEventListener("click",()=>{
                 showDetalles(element.children[0].value);
-            })
+            });
         }
-        let eliminar=document.getElementsByClassName("eliminar");
-        eliminar.addEventListener("click", (event) =>{
-            detalles.classList.remove(contacto);
-            event.preventDefault();
-        })
+        botones=document.getElementsByClassName("eliminarContacto");
+        for (let i = 0; i < botones.length; i++){
+            const element = botones[i];
+            element.addEventListener("click",()=>{
+                let siono=document.getElementById("pregunta");
+                amigos.forEach((index)=>{
+                    siono.innerHTML=`
+                    <div class="pregunta">
+                        <h4>¿Estas seguro que quieres eliminarlo?</h4>
+                        <div>
+                            <button class="si" ele="${index.nombre}">Si</button>
+                            <button class="no" value="">No</button>
+                        </div>
+                    </div>`;
+                    siono.classList.remove("oculto");
+                })
+                botones=document.getElementsByClassName("si");
+                for (let i = 0; i < botones.length; i++){
+                    const element = botones[i];
+                    element.addEventListener("click",()=>{
+                        amigos.splice(element.getAttribute("ele"),1);  
+                        pintar(); 
+                        siono.classList.add("oculto");
+                        
+                    });
+                }
+                botones=document.getElementsByClassName("no");
+                for (let i = 0; i < botones.length; i++){
+                    const element = botones[i];
+                    element.addEventListener("click",()=>{
+                        // amigos.splice(element.getAttribute("ele"),1);  
+                        pintar(); 
+                        siono.classList.add("oculto");
+                        
+                    });
+                }
+                // amigos.splice(element.getAttribute("ele"),1);  
+                // pintar();     
+             
+            });
+        }
     }
     else
     {
@@ -86,32 +122,63 @@ btnCancelar.addEventListener("click",(event)=>{
 })
 
 btnGuardar.addEventListener("click",(event)=>{
+    let error = document.getElementById("error");
+    let error2 = document.getElementById("error2");
+    let error3 = document.getElementById("error3");
+    let error4 = document.getElementById("error4");
     if(formulario[0].value == "" ){
-        alert("Completa el campo Nombre");
+        // btnGuardar=document.getElementById("error");
+        error.innerHTML=`
+        <p class="texterror">Complete el campo Nombre</p>`;
+        error.classList.remove("oculto");
         event.preventDefault();
     }
     else if(formulario[1].value  == "" ){
-        alert("Completa el campo Teléfono");
+        // btnGuardar=document.getElementById("error2");
+        error2.innerHTML=`
+        <p class="texterror">Complete el campo Telefono</p>`;
+        error2.classList.remove("oculto");
         event.preventDefault();
-    }  
+    }
     else if(formulario[2].value  == "" ){
-        alert("Completa el campo Correo");
+        // btnGuardar=document.getElementById("error3");
+        error3.innerHTML=`
+        <p class="texterror">Complete el campo Correo</p>`;
+        error3.classList.remove("oculto");
         event.preventDefault();
     }   
-        else if(formulario[3].value  == "" ){
-            alert("Completa el campo Foto"); 
-            event.preventDefault();   
+    else if(formulario[3].value  == "" ){
+        // btnGuardar=document.getElementById("error4");
+        error4.innerHTML=`
+        <p class="texterror">Complete el campo Foto</p>`;
+        error4.classList.remove("oculto");
+        event.preventDefault(); 
+
     }else if(formulario[0,1,2,3].value !== ""){//Si los campos tiene un valor agregarlo
 
-    let contacto={
-        nombre:formulario["nombre"].value,
-        telefono:formulario["telefono"].value,
-        correo:formulario["correo"].value,
-        foto:formulario["foto"].value
-    };
-    amigos.push(contacto);
-    limpiar();
-    pintar();
-    event.preventDefault();
-}
+
+        error.classList.add("oculto");
+        error2.classList.add("oculto");
+        error3.classList.add("oculto");
+        error4.classList.add("oculto");
+        
+
+        let contacto={
+            nombre:formulario["nombre"].value,
+            telefono:formulario["telefono"].value,
+            correo:formulario["correo"].value,
+            foto:formulario["foto"].value
+
+        };
+        // if(formulario[1].value == telefono){
+        //     error2.innerHTML=`
+        //     <p class="texterror">Teléfono repetido</p>`;
+        //     error2.classList.remove("oculto");
+        //     event.preventDefault();
+        // }
+        amigos.push(contacto);
+        limpiar();
+        pintar();
+        event.preventDefault();
+    }
 })
